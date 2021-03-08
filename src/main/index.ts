@@ -1,4 +1,4 @@
-import {app, BrowserWindow} from 'electron';
+import {app, BrowserWindow, screen} from 'electron';
 import {join} from 'path';
 import {URL} from 'url';
 
@@ -32,8 +32,14 @@ if (!gotTheLock) {
   let mainWindow: BrowserWindow | null = null;
 
   async function createWindow() {
+    const { width, height } = screen.getPrimaryDisplay().workAreaSize
     mainWindow = new BrowserWindow({
       show: false,
+      frame: false,
+      width: 300,
+      height: height,
+      x: width - 300,
+      y: 0,
       webPreferences: {
         preload: join(__dirname, '../preload/index.cjs.js'),
         contextIsolation: env.MODE !== 'test',   // Spectron tests can't work with contextIsolation: true
@@ -51,11 +57,11 @@ if (!gotTheLock) {
       : new URL('renderer/index.html', 'file://' + __dirname).toString();
 
     await mainWindow.loadURL(pageUrl);
-    mainWindow.maximize();
+    // mainWindow.maximize();
     mainWindow.show();
 
     if (env.MODE === 'development') {
-      mainWindow.webContents.openDevTools();
+      // mainWindow.webContents.openDevTools();
     }
   }
 
