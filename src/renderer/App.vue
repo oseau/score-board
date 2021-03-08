@@ -1,6 +1,5 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png" style="width: 50%" />
-  <app-navigation />
   <router-view />
 </template>
 
