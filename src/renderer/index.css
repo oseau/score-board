@@ -146,3 +146,7 @@ table {
   -webkit-app-region: no-drag;
   /* cursor: default; */
 }
+
+::-webkit-scrollbar {
+  display: none;
+}
