@@ -10,8 +10,6 @@ By default, the **Vue framework** is used for the interface, but you can easily 
 
 > Vite is framework agnostic
 
-
-
 ## Support
 This template maintained by [Alex Kozack][cawa-93-github]. You can [💖 sponsor him][cawa-93-sponsor] for continued development of this template.
 
