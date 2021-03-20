@@ -48,6 +48,7 @@ Vite provides you with many useful features, such as: `TypeScript`, `TSX/JSX`, `
 - Code formatting rules follow the latest Vue recommendations and best practices thanks to [eslint-plugin-vue].
 - Installed [Vue.js devtools beta](https://chrome.google.com/webstore/detail/vuejs-devtools/ljjemllljcmogpfapbkkighbhhppjdbg) with Vue 3 support.
 
+See [examples of web pages for different frameworks](https://github.com/vitejs/vite/tree/main/packages/create-app).
 
 ### Continuous Integration
 - The configured workflow for check the types for each push and PR.
@@ -76,7 +77,7 @@ At the moment, there are the following problems:
 
 - ⚠ Some files require refactoring.
 - ⚠ Watch mode for the `main` and `preload` entry points should be improved. Blocked by  [vite#1434](https://github.com/vitejs/vite/issues/1434).
-- ⚠ Typechecking in `.vue` temporarily disabled due to an issue [znck/vue-developer-experience#208](https://github.com/znck/vue-developer-experience/issues/208). Type checking should still work in your IDE, but it will not run in CI.
+- ⚠ Typechecking `renderer` package in CI implemented by [![vue-tsc](https://img.shields.io/github/package-json/dependency-version/cawa-93/vite-electron-builder/dev/vue-tsc)][vue-tsc], which has a very early version. This is not a problem if you do not use Vue or TypeScript.
 - ⏳ Automatic code signing — planned.
 - ⏳ I want to migrate all code base to ESM. But because Nodejs  ecosystem is unprepared I not known whether this will give more benefits or more inconvenience.
 
@@ -93,15 +94,25 @@ The structure of this template is very similar to the structure of a monorepo.
 
 The entire source code of the program is divided into three modules (packages) that are bundled each independently:
 - [`packages/main`](packages/main)
-  Electron [**main script**](https://www.electronjs.org/docs/tutorial/quick-start#create-the-main-script-file).
+Electron [**main script**](https://www.electronjs.org/docs/tutorial/quick-start#create-the-main-script-file).
 - [`packages/preload`](packages/preload)
-  Used in `BrowserWindow.webPreferences.preload`. See [Checklist: Security Recommendations](https://www.electronjs.org/docs/tutorial/security#2-do-not-enable-nodejs-integration-for-remote-content).
+Used in `BrowserWindow.webPreferences.preload`. See [Checklist: Security Recommendations](https://www.electronjs.org/docs/tutorial/security#2-do-not-enable-nodejs-integration-for-remote-content).
 - [`packages/renderer`](packages/renderer)
-  Electron [**web page**](https://www.electronjs.org/docs/tutorial/quick-start#create-a-web-page).
+Electron [**web page**](https://www.electronjs.org/docs/tutorial/quick-start#create-a-web-page).
+
+### Build web resources
 
 Packages `main` and `preload` are built in [library mode](https://vitejs.dev/guide/build.html#library-mode) as it is a simple javascript.
 `renderer` package build as regular web app.
 
+The build of web resources is performed in the [`scripts/build.js`](scripts/build.js). Its analogue is a sequential call to `vite build` for each package.
+
+### Compile App
+Next step is run  packaging and compilation a ready for distribution Electron app for macOS, Windows and Linux with "auto update" support out of the box. 
+
+To do this, using the [electron-builder]:
+- In npm script `compile`: This script is configured to compile the application as quickly as possible. It is not ready for distribution, is compiled only for the current platform and is used for debugging.
+- In GitHub Action: The application is compiled for any platform and ready-to-distribute files are automatically added to the draft GitHub release. 
 
 
 ### Using electron API in renderer
@@ -165,14 +176,14 @@ When running building, environment variables are loaded from the following files
 See [Contributing Guide](contributing.md).
 
 
-[vite]: https://vitejs.dev/
-[electron]: https://electronjs.org/
-[electron-builder]: https://www.electron.build/
-[vue]: https://v3.vuejs.org/
+[vite]: https://github.com/vitejs/vite/
+[electron]: https://github.com/electron/electron
+[electron-builder]: https://github.com/electron-userland/electron-builder
+[vue]: https://github.com/vuejs/vue-next
 [vue-router]: https://github.com/vuejs/vue-router-next/
-[typescript]: https://www.typescriptlang.org/
-[spectron]: https://www.electronjs.org/spectron/
-[@vuedx/typecheck]: https://github.com/znck/vue-developer-experience/tree/master/packages/typecheck
+[typescript]: https://github.com/microsoft/TypeScript/
+[spectron]: https://github.com/electron-userland/spectron
+[vue-tsc]: https://github.com/johnsoncodehk/vue-tsc
 [eslint-plugin-vue]: https://github.com/vuejs/eslint-plugin-vue
 [cawa-93-github]: https://github.com/cawa-93/
 [cawa-93-sponsor]: https://www.patreon.com/Kozack/
