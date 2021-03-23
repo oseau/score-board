@@ -1,4 +1,5 @@
 import { contextBridge } from "electron";
+import getScore, { setScore } from "./data";
 
 const apiKey = "electron";
 /**
@@ -6,6 +7,8 @@ const apiKey = "electron";
  */
 const api: ElectronApi = {
   versions: process.versions,
+  getScore,
+  setScore,
 };
 
 if (import.meta.env.MODE !== "test") {

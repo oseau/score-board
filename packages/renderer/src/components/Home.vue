@@ -13,22 +13,13 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, toRaw, unref } from "vue";
 import Bar from "./Bar.vue";
+import { useElectron } from "/@/use/electron";
+const { getScore, setScore } = useElectron();
 
-const scores = ref([
-  {
-    name: "黄柄淇、高明泽、王锦程、孔森羽",
-    score: 10,
-    percent: 100,
-  },
-  {
-    name: "孔荣欣、薛皓太、王一博、齐林、王浩翔、潘昱龙、王子康",
-    score: 10,
-    percent: 100,
-  },
-  { name: "邵熙杰、张宝聚、高小珺、王思彤", score: 10, percent: 100 },
-]);
+const scores = ref([]);
+getScore().then((s) => (scores.value = s));
 
 const clickBar = (idx, diff) => {
   scores.value[idx].score += diff;
@@ -53,10 +44,12 @@ const clickBar = (idx, diff) => {
       ((score.score ** 2 / largest.score ** 2) * 100).toFixed()
     );
   }
+  setScore({ scores: toRaw(unref(scores)) });
 };
 
 const editName = (idx, name) => {
   scores.value[idx].name = name;
+  setScore({ scores: toRaw(unref(scores)) });
 };
 </script>
 
