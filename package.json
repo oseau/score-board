@@ -1,5 +1,5 @@
 {
-  "name": "vite-electron-builder",
+  "name": "ok-score-board",
   "private": true,
   "engines": {
     "node": ">=v14.16.0",
